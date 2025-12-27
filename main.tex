@@ -1,0 +1,306 @@
+\documentclass[11pt, a4paper]{article}
+
+% --- 选择语句 ---
+\newif\ifshowtable
+\showtablefalse  % 设置为 \showtabletrue 显示目录
+              % 设置为 \showtablefalse 隐藏目录
+
+\newif\ifshowhead
+\showheadtrue
+
+% --- 语言与字体设置 ---
+\usepackage[french]{babel} % 处理法语标点、断句和日期
+\usepackage[UTF8]{ctex}   % 处理中文字体
+\usepackage{fontspec}      % 允许设置西文字体
+
+% --- 数学相关宏包 ---
+\usepackage{amsmath, amsfonts, amssymb, amsthm}
+\usepackage{mathtools}     % 增强数学公式功能
+\usepackage{geometry}      % 调整页边距
+\usepackage{quiver}
+\usepackage{empheq}
+\usepackage[colorlinks=true, linkcolor=blue]{hyperref}
+\usepackage{cleveref}
+\geometry{left=2.5cm, right=2.5cm, top=2.5cm, bottom=2.5cm}
+
+% --- 自定义命令 ---
+\newcommand{\Ker}[1]{\text{Ker}\left(#1\right)}
+\renewcommand{\Im}[1]{\text{Im}\left(#1\right)}
+\newcommand{\dd}{\mathrm{d}}
+
+% --- 定理环境设置 (中文 & 法语) ---
+\newtheorem{thm}{Théorème}[section]
+\newtheorem{defi}{Définition}[section]
+\newtheorem{prop}{Proposition}[section]
+\newtheorem{cor}{Cor‌ollaire}[section]
+
+\newtheorem{dingli}{定理}[section]
+\newtheorem{dingyi}{定义}[section]
+
+\usepackage{titlesec}
+
+% --- 设置章节标题居中 ---
+\titleformat{\section}
+    {\centering\normalfont\Large\bfseries}  % 格式：居中，大号，粗体
+    {\thesection}                            % 标签
+    {1em}                                    % 标签与标题间距
+    {}                                       % 标题前代码
+
+% --- 页眉页脚 ---
+\usepackage{fancyhdr}
+\ifshowhead
+    \pagestyle{fancy}
+    \fancyhf{}
+    \fancyhead[L]{Forme normale}
+    \fancyhead[R]{\thepage}
+\fi
+
+% --- 文档信息 ---
+\title{Forme normale}
+\author{Descartes}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+\ifshowtable
+    \tableofcontents
+    \newpage 
+\fi
+
+\section{Théorème de l'application ouverte}
+Dans la preuve de la forme normale dans les espaces de Banach, nous utilisons le célèbre théorème de l'application ouverte : 
+
+\begin{thm}[Théorème de l'application ouverte]
+    Soient $E$ et $F$ deux espaces de Banach. Soit $u : E \to F$ une application linéaire continue. 
+    Si $u$ est \textbf{surjective}, alors $u$ est une application \textbf{ouverte}, c'est-à-dire que pour tout ouvert $U$ de $E$, l'image $u(U)$ est un ouvert de $F$.
+\end{thm}
+
+\begin{cor}
+    Soient $E$ et $F$ deux espaces de Banach. Soit $u : E \to F$ une application linéaire continue et \textbf{bijective}. 
+    Alors l'application réciproque $u^{-1} : F \to E$ est également continue. 
+    En d'autres termes, $u$ est un isomorphisme d'espaces de Banach.
+\end{cor}
+
+\section{Forme normale}
+
+On rappelle l'énoncé de forme normale. 
+Soient $E$, $F$ deux espaces de Banach. Soit $x_0 \in E$. Soit $f : E \to F$ une application de classe $\mathcal C^1$ au voisinage de $x_0$. 
+On suppose que $\Ker{\dd f(x_0)}$ et $\Im{\dd f(x_0)}$ sont fermé et facteurs directs. Soient $E_1$ un supplémentaire fermé de $\Ker{\dd f(x_0)}$, et $F_1$ un supplémentaire fermé de $\Im{\dd f(x_0)}$. Alors : 
+
+\begin{thm}
+    Si $\dd f(x_0)$ est \textbf{ surjective}, il existe $U\subset\Ker{\dd f(x_0)}$ un voisinage de $(0,0)$ et $\phi:U\to E$ une application qui réalise un $\mathcal C^1-$difféomorphisme sur son image tel que : 
+    $$
+    	\phi(0,0) = x_0 \quad\quad \text{et} \quad\quad \forall(n,a) \in U, \quad f \circ \phi (n,a) = f(x_0) + a
+    $$
+\end{thm}
+
+\begin{proof}
+    Soit $P : E \to E$ le projecteur sur $\Ker{\dd f(x_0)}$ parallèlement à $E_1$ (i.e. $P^2 = P$, $\Im{P} = \Ker{\dd f(x_0)}$). Puisque $\Ker{\dd f(x_0)}$ est un facteur direct (admet un supplémentaire topologique), $P$ est continu.
+    
+    Nous définissons l'application $\alpha$, qui jouera le rôle de l'inverse de $\phi$, par :
+    \begin{align*}
+        \alpha : E &\to \Ker{\dd f(x_0)} \times F \\
+        x &\mapsto (P(x-x_0),f(x)-f(x_0))
+    \end{align*}
+    Soit $u = u_0 + u_1 \in E$, avec $u_0 \in \Ker{\dd f(x_0)}$ et $u_1 \in E_1$. On a alors :
+    $$
+    	\dd\alpha(x_0).u = (P.u,\dd f(x_0).u) = (u_0,\dd f(x_0).u_1)
+    $$
+    Nous souhaitons montrer que $\dd \alpha(x_0)$ est inversible. Pour cela, cherchons à expliciter l'inverse de $\dd \alpha(x_0)$ :
+    
+    Soit $(k,h) \in \Ker{\dd f(x_0)} \times F$ tel que $\dd\alpha(x_0).u = (k,h)$, c'est-à-dire :
+    $$
+    	\begin{cases}
+    		u_0 = k \\
+    		\dd f(x_0).u_1 = h
+    	\end{cases}
+    $$
+    Nous cherchons à exprimer linéairement $u$ en fonction de $k$ et $h$. Comme $u = u_0 + u_1$ et que $u_0 = k$, il suffit de déterminer $u_1$.
+    
+    Nous savons que la restriction $\dd f(x_0)|_{E_1} : E_1 \to F$ est une bijection linéaire continue. D'après le théorème de l'application ouverte, son inverse $\left(\dd f(x_0)|_{E_1}\right)^{-1} : F \to E_1$ est également continu.
+    Puisque $u_1 \in E_1$, la seconde équation s'écrit $\dd f(x_0)|_{E_1}.u_1 = h$. En appliquant $\left(\dd f(x_0)|_{E_1}\right)^{-1}$ des deux côtés, on obtient : 
+    $$
+    	u_1 = \left(\dd f(x_0)|_{E_1}\right)^{-1}.h
+    $$
+    On en déduit l'expression de $u$ :
+    $$
+    	u = u_0+u_1 = k + \left(\dd f(x_0)|_{E_1}\right)^{-1}.h
+    $$
+    Ainsi, $\dd\alpha(x_0) \in \mathcal L(E,\Ker{\dd f(x_0)}\times F)$ est une bijection linéaire continue. En utilisant de nouveau le théorème de l'application ouverte, son inverse est également continu.
+    
+    D'après le théorème d'inversion locale, il existe un voisinage ouvert $W$ de $x_0$ dans $E$ tel que $\alpha(W)$ soit un voisinage ouvert de $\alpha(x_0) = (0,0)$ dans $\Ker{\dd f(x_0)} \times F$, et que $\alpha : W \to \alpha(W)$ soit un $\mathcal C^1-$difféomorphisme.
+    Posons $U = \alpha(W)$ et $\phi = \alpha^{-1} : U\to W$.
+    Comme $\alpha(x_0) = (0,0)$, on a $\phi(0,0) = x_0$.
+    
+    Pour tout $(n,a) \in U$, posons $x = \phi(n,a)$. Nous avons alors :
+    $$
+    	(n,a) = \alpha(x) = (P(x-x_0),f(x)-f(x_0)) \Rightarrow a = f(x) - f(x_0) \Rightarrow f \circ \phi (n,a) = f(x) = a + f(x_0)
+    $$
+\end{proof}
+
+\begin{thm}
+    Si $\dd f(x_0)$ est \textbf{injective}, il existe $U \subset \Im{\dd f(x_0)}$, $V \subset F$ des voisinages de (respectivement) $0$ et $f(x_0)$ et $\phi : U \to E$, $\psi : V \to \Im{\dd f(x_0)} \times F_1$ des applications qui réalisent des $\mathcal C^1-$difféomorphismes sur leurs images telles que : 
+    $$
+    	\phi(0) = x_0 \quad\quad \text{et} \quad\quad \psi(f(x_0)) = (0,0)
+    $$
+    $$
+    	\forall a \in U, \quad \psi \circ f \circ \phi (a) = (a,0)
+    $$
+\end{thm}
+
+\begin{proof}
+    Puisque $\dd f(x_0) : E \to F$ est une injection linéaire continue et que $\Im{\dd f(x_0)}$ est un sous-espace fermé de $F$, l'application $\dd f(x_0)$ induit une bijection linéaire continue de $E$ sur son image $\Im{\dd f(x_0)}$. D'après le théorème de l'application ouverte, son inverse $\dd f(x_0)^{-1} : \Im{\dd f(x_0)} \to E$ est également continu.
+    
+    Définissons l'application $\phi$ par :
+    \begin{align*}
+        \phi : \Im{\dd f(x_0)} &\to E \\
+        a &\mapsto x_0 + \dd f(x_0)^{-1}.a 
+    \end{align*}
+    Il s'agit d'une bijection affine continue (composée d'une translation et d'un isomorphisme linéaire), c'est donc un $\mathcal C^1-$difféomorphisme global. De plus, $\phi(0)=x_0$.
+    
+    Pour obtenir $\psi$, nous construisons l'application $\beta$ (qui jouera le rôle de son inverse local) comme suit :
+    \begin{align*}
+        \beta : \Im{\dd f(x_0)} \times F_1 &\to F \\
+        (a,b) &\mapsto f\left(x_0+\dd f(x_0)^{-1}.a\right)+b
+    \end{align*}
+    On a $\beta(0,0) = f(x_0)$. Soit $(k,h) \in \Im{\dd f(x_0)} \times F_1$, calculons la différentielle :
+    $$
+    	\dd \beta(0,0).(k,h) = \dd f(x_0) \circ \dd f(x_0)^{-1}.k + h = k + h
+    $$
+    Puisque $F=\Im{\dd f(x_0)} \oplus F_1$, notons $Q : F \to F$ le projecteur sur $\Im{\dd f(x_0)}$ parallèlement à $F_1$.
+    Soit $v \in F$. L'équation $\dd \beta(0,0).(k,h) = v$ s'écrit $k+h=v$. En appliquant le projecteur, on trouve $k = Q(v)$, et donc $h = v - Q(v)$. Ainsi, l'application linéaire $\dd \beta(0,0)$ est bijective (c'est l'isomorphisme canonique associé à la somme directe).
+    
+    D'après le théorème d'inversion locale, il existe un voisinage ouvert $W$ de $(0,0)$ dans $\Im{\dd f(x_0)} \times F_1$ et un voisinage ouvert $V$ de $\beta(0,0)=f(x_0)$ dans $F$ tels que $\beta : W \to V$ soit un $\mathcal C^1-$difféomorphisme.
+    Posons $\psi = \beta^{-1} : V \to \Im{\dd f(x_0)} \times F_1$.
+    On a bien $\psi(f(x_0)) = \psi(\beta(0,0)) = (0,0)$.
+    
+    Soit $U$ un voisinage de $0$ dans $\Im{\dd f(x_0)}$ suffisamment petit pour que $U \times \{0\} \subset W$. Pour tout $a \in U$, considérons $\psi(f(\phi(a)))$.
+    Par définition de $\beta$, on remarque que :
+    $$
+        \beta(a, 0) = f(x_0 + \dd f(x_0)^{-1}.a) + 0 = f(\phi(a))
+    $$
+    En appliquant $\psi$ des deux côtés, on obtient :
+    $$
+        (a, 0) = \psi(f(\phi(a)))
+    $$
+    Ce qui est le résultat attendu.
+\end{proof}
+
+\begin{thm}
+    Si $\dd f(x_0)$ est de \textbf{rang (ou corang)\footnote{$\mathrm{rg}(\dd f(x_0)):=\dim\big(\Im{\dd f(x_0)}\big)$, $\mathrm{corg}(\dd f(x_0)):=\dim \big(F/\Im{\dd f(x_0)}\big)=\dim F_1$} fini est constant au voisinage de $x_0$}, il existe $U \subset \Ker{\dd f(x_0)} \times \Im{\dd f(x_0)}$ un voisinage de $(0,0)$, $V \subset F$ un voisinage de $\dd f(x_0)$ et $\phi : U \to E$, $\psi : V \to \Im{\dd f(x_0)} \times F_1$ des applications qui réalisent des $\mathcal C^1-$difféomorphismes sur leurs images telles que : 
+    $$
+        \phi(0,0) = x_0 \quad\quad\text{et}\quad\quad \psi(f(x_0)) = (0,0)
+    $$
+    $$
+        f \circ \phi(U) \subset V
+    $$
+    $$
+        \forall (n,a) \in U, \quad \psi \circ f \circ \phi (n,a) = (a,0)
+    $$
+\end{thm}
+
+$$
+    \begin{tikzcd}
+    	{\Ker{\dd f(x_0)} \times \Im{\dd f(x_0))}} & E && F & {\Im{\dd f(x_0)} \times F_1} \\
+    	U & {\phi(U)} && V & {\psi(V)} \\
+    	{(0,0)} & {x_0} && {f(x_0)} & {(0,0)} \\
+    	{(n,a)} &&&& {(a,0)}
+    	\arrow["\alpha"', from=1-2, to=1-1]
+    	\arrow["f", from=1-2, to=1-4]
+    	% \arrow["\beta"', from=1-5, to=1-4]
+    	\arrow["\phi", from=2-1, to=2-2]
+    	\arrow["f", from=2-2, to=2-4]
+    	\arrow["\psi", from=2-4, to=2-5]
+    	\arrow["\phi", maps to, from=3-1, to=3-2]
+    	\arrow["f", maps to, from=3-2, to=3-4]
+    	\arrow["\psi", maps to, from=3-4, to=3-5]
+    	\arrow["\psi \circ f \circ \phi", maps to, from=4-1, to=4-5]
+    \end{tikzcd}
+$$
+
+\begin{proof}
+    Soit $P : E \to E$ le projecteur continu sur $\Ker{\dd f(x_0)}$ parallèlement à $E_1$, et $Q : F \to F$ le projecteur continu sur $\Im{\dd f(x_0)}$ parallèlement à $F_1$. 
+    Définissons l'application $\alpha$ par : 
+    \begin{align*}
+        \alpha:E&\to\Ker{\dd f(x_0)}\times \Im{\dd f(x_0)}\\
+        x&\mapsto\big(P(x-x_0),Q(f(x)-f(x_0))\big)
+    \end{align*}
+    La restriction $\dd f(x_0)|_{E_1} : E_1 \to \Im{\dd f(x_0)}$ est un isomorphisme (bijection linéaire continue). En utilisant son inverse, on peut montrer de manière analogue que $\dd \alpha(x_0)$ est inversible. 
+    D'après le théorème d'inversion locale, il existe un voisinage ouvert $W$ de $x_0$ tel que $\alpha : W \to \alpha(W)$ soit un $\mathcal C^1-$difféomorphisme. Posons $\phi = \alpha^{-1} : \alpha(W) \to W$. 
+    
+    Soit $(n,a) \in \alpha(W) \subset \Ker{\dd f(x_0)} \times \Im{\dd f(x_0)}$. On a :
+    $$
+    	(n,a) = \alpha(\phi (n,a)) = \big(P(\phi(n,a)-x_0),Q(f(\phi(n,a))-f(x_0))\big)
+    $$
+    \begin{empheq}[left=\Rightarrow\empheqlbrace]{align}
+        n &= P(\phi(n,a)-x_0) \label{eq1} \\
+        a &= Q(f(\phi(n,a))-f(x_0)) \label{eq2}
+    \end{empheq}
+    Posons $H = f \circ \phi$. L'équation (\ref{eq2}) devient $a = Q(H(n,a) - f(x_0))$. En différentiant cette égalité par rapport aux deux variables, on obtient :
+    \begin{empheq}{align}
+        0 &= Q \circ \nabla_1 H(n,a).k,\quad \text{pour } k \in \Ker{\dd f(x_0)} \label{eq3} \\
+        h &= Q \circ \nabla_2 H(n,a).h,\quad \text{pour } h\in\Im{\dd f(x_0)}\label{eq4}
+    \end{empheq}
+    
+    \textbf{Affirmation :} Au voisinage de $(0,0)$, $\nabla_1 H(n,a)=0$, c'est-à-dire 
+    $$
+        \forall k \in \Ker{\dd f(x_0)},\ \nabla_1 H(n,a).k = 0
+    $$
+    Par hypothèse, il existe un voisinage ouvert $O_1 \times O_2 \subset \alpha(W)$ de $(0,0)$ dans $\Ker{\dd f(x_0)} \times \Im{\dd f(x_0)}$, tel que le rang (ou le corang) de $\dd f$ soit une constante finie sur $\phi(O_1 \times O_2)$, c'est-à-dire :
+    $$
+        \forall x \in \phi(O_1 \times O_2), \ \dim\Im{\dd f(x)} = \dim\Im{\dd f(x_0)}<\infty
+    $$ 
+    ou respectivement:
+    $$
+        \dim\big(F/\Im{\dd f(x)}\big) = \dim\big(F/\Im{\dd f(x_0))}\big)<\infty
+    $$
+    Puisque $\phi$ est un difféomorphisme local, le rang (ou corang) de $\dd H$ sur $O_1 \times O_2$  est égal à cette même constante. 
+    
+    D'après (\ref{eq4}), on a $\Im{Q \circ \nabla_2 H(n,a)} = \Im{\dd f(x_0)}$. De plus, comme
+    $$
+        \dd H(n,a).(k,h) = \nabla_1 H(n,a).k+\nabla_2 H(n,a).h, 
+    $$
+    on a l'inclusion :
+    $$
+        \Im{\dd H(n,a)} \supset \Im{\nabla_2 H(n,a)} \supset \Im{Q \circ \nabla_2 H(n,a)} = \Im{\dd f(x_0)}
+    $$
+    En comparant les dimensions (ou codimensions) des deux côtés, on obtient $\Im{\dd H(n,a)} = \Im{\dd f(x_0)}$. Ainsi :
+    $$
+        \nabla_1 H(n,a).k \in \Im{\dd f(x_0)} \Rightarrow \nabla_1 H(n,a).k = Q(\nabla_1 H(n,a).k) = 0
+    $$
+    Cela prouve l'Affirmation, ce qui signifie que localement $H(n,a)$ ne dépend pas de $n$. On peut donc poser :
+    $$
+        (\mathrm{Id}_F-Q)(H(n,a)-f(x_0)) = S(a),
+    $$ 
+    d'où
+    $$
+        H(n,a) = Q(H(n,a)) + (\mathrm{Id}_F-Q)(H(n,a)) = f(x_0) + a + S(a)
+    $$
+    Il est aisé de voir que $S : O_2 \to F_1$ est de classe $\mathcal C^1$, et que $S(0) = 0$, $\dd S(0) = 0$. 
+
+    Définissons l'application $\psi$ par : 
+    \begin{align*}
+        \psi : O_2 \oplus F_1 \subset F &\to \Im{\dd f(x_0)} \times F_1 \\
+        y &\mapsto \big(Q(y-f(x_0)),(\mathrm{Id}_F-Q)(y-f(x_0))-S(Q(y-f(x_0)))\big)
+    \end{align*}
+    Alors $\psi(f(x_0)) = (0,0)$, et pour tout $v \in F$ :
+    $$
+        \dd \psi(f(x_0)).v = (Q.v,(\mathrm{Id}_F-Q).v-\dd S(0).Q.v) = (Q.v,(\mathrm{Id}_F-Q).v)
+    $$
+    Ceci est l'isomorphisme naturel de la somme directe interne vers le produit direct. Par le théorème d'inversion locale, il existe un voisinage ouvert $V \subset O_2 \oplus F_1$ de $f(x_0)$ dans $F$, tel que $\psi : V \to \psi(V)$ soit un $\mathcal C^1-$difféomorphisme. 
+
+    Prenons $U = H^{-1}(V) \cap (O_1 \times O_2)$ comme voisinage ouvert de $(0,0)$ dans $\Ker{\dd f(x_0)} \times \Im{\dd f(x_0)}$. Alors $f(\phi(U)) \subset V$. 
+    Pour tout $(n,a) \in U$, posons $x = \phi(n,a)$, alors :
+    $$
+        (n,a) = \alpha(x) = \big(P(x-x_0), Q(f(x)-f(x_0))\big) \Rightarrow a = Q(f(x)-f(x_0))
+    $$
+    Nous obtenons finalement :
+    \begin{align*}
+        \psi(f(x)) &= \big(Q(f(x)-f(x_0)),(\mathrm{Id}_F-Q)(f(x)-f(x_0))-S(Q(f(x)-f(x_0)))\big) \\
+        &= \big(a,(\mathrm{Id}_F-Q)(H(n,a)-f(x_0))-S(a)\big) \\
+        &= (a,0)
+    \end{align*}
+\end{proof}
+
+\end{document}
